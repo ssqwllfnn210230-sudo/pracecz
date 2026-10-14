@@ -1,2 +1,231 @@
 # pracecz
 Jobs in Czechia
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Знайди роботу в Чехії. Вакансії, зарплата та калькулятор заробітку.">
+<title>PraceCZ — Práce v Česku. Jednoduše.</title>
+<style>
+:root{--bg:#090d18;--panel:#111827;--panel2:#182235;--text:#f4f7ff;--muted:#9aa8bd;--blue:#4785ff;--line:#27344a;--green:#55d6a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:10;background:#090d18ed;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.wrap{max-width:1120px;margin:auto;padding:0 18px}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:23px;font-weight:900;letter-spacing:-1px}.logo span{color:var(--blue)}
+.lang{background:var(--panel);color:white;border:1px solid var(--line);border-radius:10px;padding:9px}
+.hero{padding:58px 0 32px;background:radial-gradient(ellipse at 75% 0%,#18356a55,transparent 55%)}
+.eyebrow{color:#83aaff;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:clamp(35px,7vw,62px);line-height:1.05;letter-spacing:-2px;margin:15px 0}
+h1 span{color:var(--blue)}
+.subtitle{color:var(--muted);font-size:16px;line-height:1.7;max-width:580px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:25px 0}
+.stat{padding:12px 15px;background:#111827bd;border:1px solid var(--line);border-radius:13px;color:var(--muted);font-size:13px}
+.stat b{color:white;font-size:17px;display:block}
+.section{padding:26px 0 44px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+h2{font-size:25px;margin:0;letter-spacing:-.6px}
+.muted{color:var(--muted);font-size:13px}
+.filters,.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;margin-bottom:18px}
+input,select{width:100%;min-width:0;background:#0b1220;border:1px solid var(--line);color:white;padding:12px;border-radius:10px;outline:none}
+input:focus,select:focus{border-color:var(--blue)}
+.btn{border:0;background:var(--blue);color:white;padding:12px 16px;border-radius:11px;font-weight:750}
+.btn.secondary{background:var(--panel2);border:1px solid var(--line)}
+.btn:hover{filter:brightness(1.12)}
+.jobs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.job{background:var(--panel);border:1px solid var(--line);padding:18px;border-radius:17px;transition:.2s}
+.job:hover{border-color:#4c79cb;transform:translateY(-2px)}
+.jobtop{display:flex;justify-content:space-between;gap:10px}
+.company-icon{width:44px;height:44px;display:grid;place-items:center;background:#1c2d4b;border-radius:13px;color:#8bb3ff;font-weight:900;font-size:18px;flex-shrink:0}
+.jobtitle{font-size:18px;font-weight:800;margin:0 0 5px}
+.company{font-size:13px;color:var(--muted)}
+.heart{border:1px solid var(--line);background:#0b1220;color:white;border-radius:10px;width:40px;height:40px;font-size:19px}
+.heart.active{color:#ff6580}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0}
+.tag{font-size:11px;background:#1a2940;color:#c3d6fa;padding:6px 9px;border-radius:8px}
+.tag.green{background:#13362e;color:#7ce6bb}
+.jobbottom{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.salary{font-size:20px;font-weight:850;color:var(--green)}
+.salary small{display:block;font-size:11px;color:var(--muted);font-weight:500}
+.jobbottom .btn{padding:10px 12px;font-size:13px}
+.notice{font-size:12px;color:#e5c57e;background:#322817;border:1px solid #584522;padding:12px 14px;border-radius:12px;margin:15px 0}
+.empty{grid-column:1/-1;padding:35px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:15px}
+.calculator{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.calc-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 7px}
+.result{display:flex;flex-direction:column;justify-content:center;gap:10px;background:linear-gradient(145deg,#17294a,#111827);border:1px solid #2d4771;border-radius:16px;padding:22px}
+.result .big{font-size:clamp(28px,5vw,42px);font-weight:900;color:var(--green);letter-spacing:-1px}
+.result p{margin:0;color:var(--muted);font-size:13px}
+footer{border-top:1px solid var(--line);padding:25px 0 35px;color:var(--muted);font-size:12px;line-height:1.8}
+footer b{color:white}
+.modal{position:fixed;inset:0;background:#000b;z-index:30;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modalbox{width:100%;max-width:520px;max-height:85vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:23px}
+.modalhead{display:flex;justify-content:space-between;gap:12px}
+.close{background:var(--panel2);border:1px solid var(--line);color:white;border-radius:9px;padding:8px 12px;height:40px}
+.modalbox p{color:var(--muted);line-height:1.7;font-size:14px}
+@media(max-width:700px){.filters{grid-template-columns:1fr 1fr}.filters input{grid-column:1/-1}.filters button{width:100%}.jobs{grid-template-columns:1fr}.calculator{grid-template-columns:1fr}.hero{padding-top:38px}.nav{height:64px}}
+@media(max-width:390px){.filters,.calc-fields{grid-template-columns:1fr}.filters input{grid-column:auto}.jobbottom{align-items:flex-end}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="logo">Prace<span>CZ</span></div>
+    <select class="lang" id="language" aria-label="Language">
+      <option value="uk">🇺🇦 Українська</option>
+      <option value="cs">🇨🇿 Čeština</option>
+      <option value="ru">🇷🇺 Русский</option>
+    </select>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow" data-i="eyebrow">Твій наступний крок</div>
+    <h1 data-i="headline">Знайди роботу<br><span>в Чехії.</span></h1>
+    <p class="subtitle" data-i="subtitle">Вакансії, зарплата та корисні інструменти — в одному місці. Просто, зрозуміло, з телефону.</p>
+    <div class="stats">
+      <div class="stat"><b>PraceCZ</b><span data-i="stat1">Робота в Чехії</span></div>
+      <div class="stat"><b>24/7</b><span data-i="stat2">Пошук з телефону</span></div>
+      <div class="stat"><b>0 Kč</b><span data-i="stat3">Безкоштовний доступ</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+<div class="wrap">
+  <div class="section-head">
+    <div><h2 data-i="jobsTitle">Знайти вакансію</h2><div class="muted" data-i="jobsSub">Обери роботу, яка тобі підходить</div></div>
+    <button class="btn secondary" id="savedBtn" data-i="saved">♡ Збережені</button>
+  </div>
+  <div class="filters">
+    <input id="search" data-ph="searchPh" placeholder="Посада або ключове слово">
+    <select id="city">
+      <option value="" data-i="allCities">Усі міста</option>
+      <option>Praha</option><option>Brno</option><option>Ostrava</option><option>Plzeň</option><option>Olomouc</option>
+    </select>
+    <select id="minimum">
+      <option value="0" data-i="anySalary">Будь-яка ставка</option>
+      <option value="150">150+ Kč/год</option>
+      <option value="180">180+ Kč/год</option>
+      <option value="200">200+ Kč/год</option>
+    </select>
+    <button class="btn" id="searchBtn" data-i="searchBtn">Шукати</button>
+  </div>
+  <div class="notice" data-i="demoNotice">⚠️ Демоверсія: вакансії нижче — приклади, а не підтверджені пропозиції роботи.</div>
+  <div class="jobs" id="jobs"></div>
+</div>
+</section>
+
+<section class="section" id="calculator">
+<div class="wrap">
+  <div class="section-head"><div><h2 data-i="calcTitle">Калькулятор зарплати</h2><div class="muted" data-i="calcSub">Порахуй заробіток та аванси</div></div></div>
+  <div class="calculator">
+    <div class="panel">
+      <div class="calc-fields">
+        <div class="field"><label data-i="rateLabel">Ставка за годину (Kč)</label><input id="rate" type="number" min="0" value="170"></div>
+        <div class="field"><label data-i="hoursLabel">Годин за день</label><input id="hours" type="number" min="0" value="8"></div>
+        <div class="field"><label data-i="daysLabel">Робочих днів</label><input id="days" type="number" min="0" value="20"></div>
+        <div class="field"><label data-i="advanceLabel">Аванси (Kč)</label><input id="advance" type="number" min="0" value="0"></div>
+        <div class="field" style="grid-column:1/-1"><label data-i="deductLabel">Інші утримання (Kč)</label><input id="deductions" type="number" min="0" value="0"></div>
+      </div>
+      <button class="btn" id="calcBtn" style="width:100%;margin-top:15px" data-i="calcBtn">Порахувати</button>
+    </div>
+    <div class="result">
+      <p data-i="grossLabel">Заробіток до утримань</p><div class="big" id="gross">27 200 Kč</div>
+      <p data-i="balanceLabel">Залишок після авансів та утримань</p><div class="big" id="balance">27 200 Kč</div>
+      <p data-i="calcDisclaimer">Орієнтовний розрахунок, не офіційна зарплатна відомість.</p>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <b>PraceCZ</b> — Práce v Česku. Jednoduše.<br>
+  <span data-i="footerText">Інформаційний проєкт для пошуку роботи в Чехії. Перевіряй роботодавця та умови перед тим, як погоджуватися на роботу.</span><br>
+  © <span id="year"></span> PraceCZ
+</div></footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modalbox">
+    <div class="modalhead"><div><div class="jobtitle" id="modalTitle"></div><div class="company" id="modalCompany"></div></div><button class="close" id="closeModal">✕</button></div>
+    <div class="tags" id="modalTags"></div>
+    <p id="modalDescription"></p>
+    <div class="notice" id="modalNotice"></div>
+    <button class="btn" id="modalSave" style="width:100%">♡</button>
+  </div>
+</div>
+
+<script>
+const translations={
+uk:{eyebrow:"Твій наступний крок",headline:'Знайди роботу<br><span>в Чехії.</span>',subtitle:"Вакансії, зарплата та корисні інструменти — в одному місці. Просто, зрозуміло, з телефону.",stat1:"Робота в Чехії",stat2:"Пошук з телефону",stat3:"Безкоштовний доступ",jobsTitle:"Знайти вакансію",jobsSub:"Обери роботу, яка тобі підходить",saved:"♡ Збережені",searchPh:"Посада або ключове слово",allCities:"Усі міста",anySalary:"Будь-яка ставка",searchBtn:"Шукати",demoNotice:"⚠️ Демоверсія: вакансії нижче — приклади, а не підтверджені пропозиції роботи.",calcTitle:"Калькулятор зарплати",calcSub:"Порахуй заробіток та аванси",rateLabel:"Ставка за годину (Kč)",hoursLabel:"Годин за день",daysLabel:"Робочих днів",advanceLabel:"Аванси (Kč)",deductLabel:"Інші утримання (Kč)",calcBtn:"Порахувати",grossLabel:"Заробіток до утримань",balanceLabel:"Залишок після авансів та утримань",calcDisclaimer:"Орієнтовний розрахунок, не офіційна зарплатна відомість.",footerText:"Інформаційний проєкт для пошуку роботи в Чехії. Перевіряй роботодавця та умови перед тим, як погоджуватися на роботу.",hour:"/год",housing:"Житло можливе",language:"Мова не обов'язкова",detail:"Детальніше",noJobs:"Нічого не знайдено. Спробуй змінити фільтри.",company:"Демо роботодавець",demo:"Демонстраційна вакансія — не підтверджена.",description:"Це демонстраційний приклад. Перед працевлаштуванням перевір роботодавця, договір, житло, транспорт та всі відрахування.",save:"Зберегти вакансію",unsave:"Прибрати зі збережених",all:"Усі вакансії"},
+cs:{eyebrow:"Tvůj další krok",headline:'Najdi práci<br><span>v Česku.</span>',subtitle:"Nabídky práce, mzda a užitečné nástroje na jednom místě. Jednoduše a z telefonu.",stat1:"Práce v Česku",stat2:"Hledání z telefonu",stat3:"Zdarma",jobsTitle:"Najít práci",jobsSub:"Vyber si práci, která ti vyhovuje",saved:"♡ Uložené",searchPh:"Pozice nebo klíčové slovo",allCities:"Všechna města",anySalary:"Jakákoliv sazba",searchBtn:"Hledat",demoNotice:"⚠️ Ukázková verze: nabídky níže jsou příklady, neověřené pracovní nabídky.",calcTitle:"Kalkulačka mzdy",calcSub:"Spočítej si výdělek a zálohy",rateLabel:"Sazba za hodinu (Kč)",hoursLabel:"Hodin denně",daysLabel:"Pracovních dní",advanceLabel:"Zálohy (Kč)",deductLabel:"Další srážky (Kč)",calcBtn:"Spočítat",grossLabel:"Výdělek před srážkami",balanceLabel:"Zůstatek po zálohách a srážkách",calcDisclaimer:"Orientační výpočet, nejde o oficiální výplatní pásku.",footerText:"Informační projekt pro hledání práce v Česku. Před nástupem si ověř zaměstnavatele a podmínky.",hour:"/hod",housing:"Možné ubytování",language:"Jazyk není nutný",detail:"Podrobnosti",noJobs:"Nic jsme nenašli. Zkus změnit filtry.",company:"Ukázkový zaměstnavatel",demo:"Ukázková nabídka — není ověřená.",description:"Toto je pouze ukázkový inzerát. Ověř si zaměstnavatele, smlouvu, ubytování, dopravu a všechny srážky.",save:"Uložit nabídku",unsave:"Odebrat z uložených",all:"Všechny nabídky"},
+ru:{eyebrow:"Твой следующий шаг",headline:'Найди работу<br><span>в Чехии.</span>',subtitle:"Вакансии, зарплата и полезные инструменты в одном месте. Просто и удобно с телефона.",stat1:"Работа в Чехии",stat2:"Поиск с телефона",stat3:"Бесплатно",jobsTitle:"Найти вакансию",jobsSub:"Выбери подходящую работу",saved:"♡ Избранное",searchPh:"Должность или ключевое слово",allCities:"Все города",anySalary:"Любая ставка",searchBtn:"Искать",demoNotice:"⚠️ Демо-версия: вакансии ниже — примеры, а не подтверждённые предложения работы.",calcTitle:"Калькулятор зарплаты",calcSub:"Рассчитай заработок и авансы",rateLabel:"Ставка в час (Kč)",hoursLabel:"Часов в день",daysLabel:"Рабочих дней",advanceLabel:"Авансы (Kč)",deductLabel:"Другие удержания (Kč)",calcBtn:"Рассчитать",grossLabel:"Заработок до удержаний",balanceLabel:"Остаток после авансов и удержаний",calcDisclaimer:"Примерный расчёт, не официальная зарплатная ведомость.",footerText:"Информационный проект для поиска работы в Чехии. Проверяй работодателя и условия до начала работы.",hour:"/час",housing:"Возможно жильё",language:"Язык не обязателен",detail:"Подробнее",noJobs:"Ничего не найдено. Попробуй изменить фильтры.",company:"Демо-работодатель",demo:"Демонстрационная вакансия — не проверена.",description:"Это пример объявления. Перед трудоустройством проверь работодателя, договор, жильё, транспорт и все удержания.",save:"Сохранить вакансию",unsave:"Убрать из избранного",all:"Все вакансии"}
+};
+const jobs=[
+{id:1,title:"Работник склада",city:"Brno",rate:175,housing:true,language:true,category:"Склад",description:"Пример работы на складе: комплектация заказов, упаковка и подготовка товаров. Условия, график и ставка требуют проверки."},
+{id:2,title:"Помощник на стройке",city:"Ostrava",rate:200,housing:false,language:true,category:"Строительство",description:"Пример строительной вакансии: помощь бригаде и перенос материалов. Уточняй договор, средства защиты и фактические часы."},
+{id:3,title:"Работник производства",city:"Plzeň",rate:180,housing:true,language:true,category:"Производство",description:"Пример работы на производстве со сменным графиком. Проверяй смены, транспорт и все удержания до согласия."},
+{id:4,title:"Уборка помещений",city:"Praha",rate:160,housing:false,language:false,category:"Уборка",description:"Пример вакансии по уборке помещений. Обязательно уточняй адрес, часы работы и способ официальной оплаты."},
+{id:5,title:"Помощник на кухне",city:"Olomouc",rate:165,housing:false,language:false,category:"Гостиницы и рестораны",description:"Пример работы помощником на кухне. Условия и наличие свободного места не подтверждены."},
+{id:6,title:"Упаковщик",city:"Brno",rate:170,housing:true,language:false,category:"Склад",description:"Пример упаковки товаров на складе. Проверь, кто работодатель, где находится объект и что входит в оплату."}
+];
+let lang="uk",savedOnly=false,currentJob=null;
+let saved=new Set();
+try{saved=new Set(JSON.parse(localStorage.getItem("pracecz_saved")||"[]"))}catch(e){}
+const $=id=>document.getElementById(id);
+function tr(k){return translations[lang][k]||translations.uk[k]||k}
+function money(n){return Math.round(n).toLocaleString("cs-CZ")+" Kč"}
+function renderJobs(){
+ const q=$("search").value.trim().toLowerCase(),city=$("city").value,min=Number($("minimum").value);
+ const list=jobs.filter(j=>(!savedOnly||saved.has(j.id))&&(!q||(j.title+" "+j.city+" "+j.category).toLowerCase().includes(q))&&(!city||j.city===city)&&j.rate>=min);
+ $("jobs").innerHTML=list.length?list.map(j=>`
+ <article class="job">
+  <div class="jobtop"><div style="display:flex;gap:12px"><div class="company-icon">${j.city.slice(0,1)}</div><div><h3 class="jobtitle">${j.title}</h3><div class="company">${j.city} · ${tr("company")}</div></div></div>
+  <button class="heart ${saved.has(j.id)?"active":""}" data-save="${j.id}" aria-label="${tr("saved")}">${saved.has(j.id)?"♥":"♡"}</button></div>
+  <div class="tags"><span class="tag">${j.category}</span>${j.housing?`<span class="tag green">⌂ ${tr("housing")}</span>`:""}${j.language?`<span class="tag">${tr("language")}</span>`:""}</div>
+  <div class="jobbottom"><div class="salary">${j.rate} Kč <small>${tr("hour")}</small></div><button class="btn" data-detail="${j.id}">${tr("detail")} →</button></div>
+ </article>`).join(""):`<div class="empty">${tr("noJobs")}</div>`;
+}
+function toggleSave(id){id=Number(id);saved.has(id)?saved.delete(id):saved.add(id);localStorage.setItem("pracecz_saved",JSON.stringify([...saved]));renderJobs();if(currentJob&&currentJob.id===id)updateModalSave()}
+function updateModalSave(){$("modalSave").textContent=(saved.has(currentJob.id)?"♥ ":"♡ ")+tr(saved.has(currentJob.id)?"unsave":"save")}
+function openJob(id){
+ currentJob=jobs.find(j=>j.id===Number(id));if(!currentJob)return;
+ const j=currentJob;
+ $("modalTitle").textContent=j.title;$("modalCompany").textContent=j.city+" · "+j.rate+" Kč "+tr("hour");
+ $("modalTags").innerHTML=`<span class="tag">${j.category}</span>${j.housing?`<span class="tag green">${tr("housing")}</span>`:""}${j.language?`<span class="tag">${tr("language")}</span>`:""}`;
+ $("modalDescription").textContent=j.description;$("modalNotice").textContent=tr("demo");
+ updateModalSave();$("modal").classList.add("open");
+}
+function calculate(){
+ const rate=Math.max(0,Number($("rate").value)||0),hours=Math.max(0,Number($("hours").value)||0),days=Math.max(0,Number($("days").value)||0),advance=Math.max(0,Number($("advance").value)||0),ded=Math.max(0,Number($("deductions").value)||0);
+ const gross=rate*hours*days;$("gross").textContent=money(gross);$("balance").textContent=money(gross-advance-ded);
+}
+function translate(){
+ document.documentElement.lang=lang;
+ document.querySelectorAll("[data-i]").forEach(el=>{const k=el.dataset.i;if(translations[lang][k])el.innerHTML=translations[lang][k]});
+ document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=tr(el.dataset.ph));
+ $("modalNotice").textContent=tr("demo");renderJobs();calculate();
+}
+$("language").addEventListener("change",e=>{lang=e.target.value;translate()});
+$("searchBtn").addEventListener("click",renderJobs);
+$("search").addEventListener("input",renderJobs);
+$("city").addEventListener("change",renderJobs);
+$("minimum").addEventListener("change",renderJobs);
+$("savedBtn").addEventListener("click",()=>{savedOnly=!savedOnly;$("savedBtn").textContent=savedOnly?"← "+tr("all"):tr("saved");renderJobs()});
+$("jobs").addEventListener("click",e=>{const s=e.target.closest("[data-save]"),d=e.target.closest("[data-detail]");if(s)toggleSave(s.dataset.save);if(d)openJob(d.dataset.detail)});
+$("closeModal").addEventListener("click",()=>$("modal").classList.remove("open"));
+$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
+$("modalSave").addEventListener("click",()=>{if(currentJob)toggleSave(currentJob.id)});
+$("calcBtn").addEventListener("click",calculate);
+["rate","hours","days","advance","deductions"].forEach(id=>$(id).addE
